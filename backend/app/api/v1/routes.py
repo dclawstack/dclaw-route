@@ -7,6 +7,8 @@ from app.models.route import Route
 from app.models.delivery import Delivery
 from app.repositories.route_repo import RouteRepository
 from app.schemas.route import RouteCreate, RouteRead, RouteUpdate
+from app.schemas.optimizer import OptimizeRequest, OptimizeResponse
+from app.services.optimizer import optimize_route
 
 router = APIRouter()
 
@@ -65,3 +67,16 @@ async def delete_route(route_id: UUID, db: AsyncSession = Depends(get_db)):
     if not route:
         raise HTTPException(status_code=404, detail="Route not found")
     await repo.delete(route)
+
+
+@router.post("/{route_id}/optimize", response_model=OptimizeResponse)
+async def optimize(
+    route_id: UUID,
+    payload: OptimizeRequest = OptimizeRequest(),
+    db: AsyncSession = Depends(get_db),
+):
+    try:
+        result = await optimize_route(db, route_id, max_stops=payload.max_stops)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return OptimizeResponse(route_id=route_id, **result.__dict__)
