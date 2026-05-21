@@ -7,6 +7,7 @@ import {
   routesApi,
   stopsApi,
   type Driver,
+  type OptimizeResult,
   type Route,
   type Stop,
 } from "@/lib/api";
@@ -19,6 +20,8 @@ export default function RoutesPage() {
   const [driverId, setDriverId] = useState<string>("");
   const [selectedStops, setSelectedStops] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [optimizing, setOptimizing] = useState<string | null>(null);
+  const [optimizeResults, setOptimizeResults] = useState<Record<string, OptimizeResult>>({});
 
   async function refresh() {
     try {
@@ -60,6 +63,20 @@ export default function RoutesPage() {
     setSelectedStops((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
+  }
+
+  async function handleOptimize(routeId: string) {
+    setOptimizing(routeId);
+    setError(null);
+    try {
+      const result = await routesApi.optimize(routeId);
+      setOptimizeResults((prev) => ({ ...prev, [routeId]: result }));
+      refresh();
+    } catch (e) {
+      setError(String(e));
+    } finally {
+      setOptimizing(null);
+    }
   }
 
   return (
@@ -135,6 +152,7 @@ export default function RoutesPage() {
         <ul className="space-y-2">
           {routes.map((r) => {
             const driver = drivers.find((d) => d.id === r.driver_id);
+            const result = optimizeResults[r.id];
             return (
               <li key={r.id} className="rounded-lg border bg-white p-4 shadow-sm">
                 <div className="flex items-center justify-between">
@@ -144,8 +162,41 @@ export default function RoutesPage() {
                   </span>
                 </div>
                 <div className="text-sm text-slate-500">
-                  {driver ? driver.name : "Unassigned"} · {r.deliveries.length} stops
+                  {driver ? driver.name : "Unassigned"} · {r.deliveries.length} stops ·{" "}
+                  {r.total_distance_km.toFixed(2)} km
                 </div>
+                {r.deliveries.length >= 2 && (
+                  <button
+                    onClick={() => handleOptimize(r.id)}
+                    disabled={optimizing === r.id}
+                    className="mt-2 rounded px-3 py-1 text-xs font-semibold text-white disabled:opacity-50"
+                    style={{ backgroundColor: "#10B981" }}
+                  >
+                    {optimizing === r.id ? "Optimizing…" : "Optimize"}
+                  </button>
+                )}
+                {result && (
+                  <div className="mt-3 grid grid-cols-3 gap-2 rounded bg-slate-50 p-3 text-xs">
+                    <div>
+                      <div className="font-semibold text-slate-500">Before</div>
+                      <div className="text-slate-900">
+                        {result.original_distance_km.toFixed(2)} km
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-500">After</div>
+                      <div className="text-slate-900">
+                        {result.optimized_distance_km.toFixed(2)} km
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-500">Saved</div>
+                      <div className="text-emerald-700">
+                        {result.improvement_percent.toFixed(1)}%
+                      </div>
+                    </div>
+                  </div>
+                )}
               </li>
             );
           })}

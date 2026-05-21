@@ -92,6 +92,15 @@ export const driversApi = {
     fetchJson<void>(`/api/v1/drivers/${id}`, { method: "DELETE" }),
 };
 
+export interface OptimizeResult {
+  route_id: string;
+  original_sequence: string[];
+  optimized_sequence: string[];
+  original_distance_km: number;
+  optimized_distance_km: number;
+  improvement_percent: number;
+}
+
 export const routesApi = {
   list: () => fetchJson<Route[]>("/api/v1/routes/"),
   get: (id: string) => fetchJson<Route>(`/api/v1/routes/${id}`),
@@ -101,6 +110,11 @@ export const routesApi = {
     fetchJson<Route>(`/api/v1/routes/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
   remove: (id: string) =>
     fetchJson<void>(`/api/v1/routes/${id}`, { method: "DELETE" }),
+  optimize: (id: string, max_stops?: number) =>
+    fetchJson<OptimizeResult>(`/api/v1/routes/${id}/optimize`, {
+      method: "POST",
+      body: JSON.stringify({ max_stops: max_stops ?? null }),
+    }),
 };
 
 export const deliveriesApi = {
