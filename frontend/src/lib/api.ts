@@ -163,3 +163,35 @@ export const trackingApi = {
   routeEta: (routeId: string) =>
     fetchJson<RouteETA>(`/api/v1/tracking/routes/${routeId}/eta`),
 };
+
+export interface DeliveryProof {
+  id: string;
+  status: string;
+  photo_b64: string | null;
+  signature_b64: string | null;
+  barcode: string | null;
+  geotag_lat: number | null;
+  geotag_lng: number | null;
+  photo_validated: boolean | null;
+  notes: string | null;
+  completed_at: string | null;
+}
+
+export interface ProofSubmit {
+  photo_b64?: string | null;
+  signature_b64?: string | null;
+  barcode?: string | null;
+  geotag_lat?: number | null;
+  geotag_lng?: number | null;
+  notes?: string | null;
+}
+
+export const proofApi = {
+  complete: (deliveryId: string, data: ProofSubmit) =>
+    fetchJson<DeliveryProof>(`/api/v1/deliveries/${deliveryId}/complete`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  get: (deliveryId: string) =>
+    fetchJson<DeliveryProof>(`/api/v1/deliveries/${deliveryId}/proof`),
+};
