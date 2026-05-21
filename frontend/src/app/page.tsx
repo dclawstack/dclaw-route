@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera } from "lucide-react";
+import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera, Clock } from "lucide-react";
 
 const tiles = [
   { href: "/stops", title: "Stops", desc: "Manage destinations and addresses", Icon: MapPin },
   { href: "/drivers", title: "Drivers", desc: "Driver roster and assignments", Icon: Truck },
+  { href: "/shifts", title: "Shifts & HOS", desc: "Driver schedules and fatigue alerts", Icon: Clock },
   { href: "/routes", title: "Routes", desc: "Plan and dispatch routes", Icon: RouteIcon },
   { href: "/tracking", title: "Tracking", desc: "Live driver positions and ETAs", Icon: Radio },
   { href: "/mobile/delivery", title: "Mobile", desc: "Driver proof-of-delivery capture", Icon: Camera },
