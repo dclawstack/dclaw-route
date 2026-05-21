@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import String, DateTime
+from sqlalchemy import String, Float, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -17,4 +17,7 @@ class Driver(Base):
     phone: Mapped[str | None] = mapped_column(String(50), nullable=True)
     vehicle_type: Mapped[str] = mapped_column(String(50), nullable=False, default="van")
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="active")
+    current_lat: Mapped[float | None] = mapped_column(Float, nullable=True)
+    current_lng: Mapped[float | None] = mapped_column(Float, nullable=True)
+    location_updated_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=utc_now)

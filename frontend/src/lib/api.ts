@@ -50,6 +50,9 @@ export interface Driver {
   phone: string | null;
   vehicle_type: string;
   status: string;
+  current_lat: number | null;
+  current_lng: number | null;
+  location_updated_at: string | null;
   created_at: string;
 }
 
@@ -125,4 +128,38 @@ export const deliveriesApi = {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
+};
+
+export interface StopETA {
+  delivery_id: string;
+  stop_id: string;
+  stop_name: string;
+  sequence: number;
+  distance_from_previous_km: number;
+  cumulative_km: number;
+  eta: string;
+  minutes_from_now: number;
+}
+
+export interface RouteETA {
+  route_id: string;
+  driver_id: string | null;
+  driver_position: [number, number] | null;
+  stops: StopETA[];
+  is_delayed: boolean;
+}
+
+export const trackingApi = {
+  pushLocation: (driverId: string, lat: number, lng: number) =>
+    fetchJson<{
+      driver_id: string;
+      current_lat: number;
+      current_lng: number;
+      location_updated_at: string;
+    }>(`/api/v1/tracking/drivers/${driverId}/location`, {
+      method: "POST",
+      body: JSON.stringify({ lat, lng }),
+    }),
+  routeEta: (routeId: string) =>
+    fetchJson<RouteETA>(`/api/v1/tracking/routes/${routeId}/eta`),
 };
