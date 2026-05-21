@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { MapPin, Truck, Route as RouteIcon, Map } from "lucide-react";
+import { MapPin, Truck, Route as RouteIcon, Map, Radio } from "lucide-react";
 
 const tiles = [
   { href: "/stops", title: "Stops", desc: "Manage destinations and addresses", Icon: MapPin },
   { href: "/drivers", title: "Drivers", desc: "Driver roster and assignments", Icon: Truck },
   { href: "/routes", title: "Routes", desc: "Plan and dispatch routes", Icon: RouteIcon },
+  { href: "/tracking", title: "Tracking", desc: "Live driver positions and ETAs", Icon: Radio },
   { href: "/map", title: "Map", desc: "Visualize stops geographically", Icon: Map },
 ];
 

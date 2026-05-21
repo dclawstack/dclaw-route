@@ -39,6 +39,5 @@ venv/
 .coverage
 htmlcov/
 
-# Alembic
-alembic/versions/*.py
-!alembic/versions/.gitkeep
+# Alembic — migrations MUST be committed; only ignore __pycache__
+alembic/versions/__pycache__/

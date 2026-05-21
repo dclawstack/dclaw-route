@@ -25,6 +25,9 @@ class DriverUpdate(BaseModel):
 
 class DriverRead(DriverBase):
     id: UUID
+    current_lat: float | None = None
+    current_lng: float | None = None
+    location_updated_at: datetime | None = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
