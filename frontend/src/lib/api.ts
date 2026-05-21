@@ -195,3 +195,43 @@ export const proofApi = {
   get: (deliveryId: string) =>
     fetchJson<DeliveryProof>(`/api/v1/deliveries/${deliveryId}/proof`),
 };
+
+export interface DriverShift {
+  id: string;
+  driver_id: string;
+  start_at: string;
+  end_at: string | null;
+  hours_worked: number;
+  status: string;
+  created_at: string;
+}
+
+export interface FatigueAlert {
+  driver_id: string;
+  driver_name: string;
+  hours_last_7_days: number;
+  limit_hours: number;
+  remaining_hours: number;
+  severity: "ok" | "warning" | "critical";
+}
+
+export const shiftsApi = {
+  list: (driverId?: string) =>
+    fetchJson<DriverShift[]>(
+      `/api/v1/shifts/${driverId ? `?driver_id=${driverId}` : ""}`
+    ),
+  create: (data: {
+    driver_id: string;
+    start_at: string;
+    end_at?: string | null;
+    hours_worked?: number;
+    status?: string;
+  }) =>
+    fetchJson<DriverShift>("/api/v1/shifts/", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  remove: (id: string) =>
+    fetchJson<void>(`/api/v1/shifts/${id}`, { method: "DELETE" }),
+  fatigueAlerts: () => fetchJson<FatigueAlert[]>("/api/v1/shifts/fatigue/alerts"),
+};
