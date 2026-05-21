@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import init_db
 from app.api.routes import health
+from app.api.v1 import stops, drivers, routes, deliveries
 
 
 @asynccontextmanager
@@ -28,6 +29,7 @@ app.add_middleware(
 )
 
 app.include_router(health.router, prefix="/health", tags=["health"])
-# TODO: Wire v1 routers here after creating them
-# from app.api.v1 import some_router
-# app.include_router(some_router.router, prefix="/api/v1/some", tags=["some"])
+app.include_router(stops.router, prefix="/api/v1/stops", tags=["stops"])
+app.include_router(drivers.router, prefix="/api/v1/drivers", tags=["drivers"])
+app.include_router(routes.router, prefix="/api/v1/routes", tags=["routes"])
+app.include_router(deliveries.router, prefix="/api/v1/deliveries", tags=["deliveries"])
