@@ -189,6 +189,46 @@ export const gigApi = {
     fetchJson<GigDriver>(`/api/v1/gig/release/${gigId}`, { method: "POST" }),
 };
 
+export interface AutonomousVehicle {
+  id: string;
+  vendor: string;
+  model: string;
+  autopilot_level: number;
+  capacity_kg: number;
+  current_lat: number | null;
+  current_lng: number | null;
+  status: string;
+  current_route_id: string | null;
+  created_at: string;
+}
+
+export interface DispatchResult {
+  av_id: string;
+  vendor: string;
+  model: string;
+  autopilot_level: number;
+  route_id: string;
+}
+
+export const avApi = {
+  list: () => fetchJson<AutonomousVehicle[]>("/api/v1/av/"),
+  create: (data: Partial<AutonomousVehicle> & { vendor: string; model: string }) =>
+    fetchJson<AutonomousVehicle>("/api/v1/av/", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  dispatch: (route_id: string, min_autopilot_level?: number) =>
+    fetchJson<DispatchResult>("/api/v1/av/dispatch", {
+      method: "POST",
+      body: JSON.stringify({
+        route_id,
+        min_autopilot_level: min_autopilot_level ?? 4,
+      }),
+    }),
+  recall: (avId: string) =>
+    fetchJson<AutonomousVehicle>(`/api/v1/av/recall/${avId}`, { method: "POST" }),
+};
+
 export const predictiveApi = {
   weather: () => fetchJson<WeatherState>("/api/v1/predictive/weather"),
   setWeather: (factor: number) =>
