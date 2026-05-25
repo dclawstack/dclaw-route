@@ -235,6 +235,21 @@ export interface CarbonOptimizeResult {
   co2_saved_kg: number;
 }
 
+export interface DemoStatus {
+  enabled: boolean;
+  seeded: boolean;
+  stop_count: number;
+  driver_count: number;
+  vehicle_count: number;
+  route_count: number;
+}
+
+export const demoApi = {
+  status: () => fetchJson<DemoStatus>("/api/v1/demo/status"),
+  seed: () => fetchJson<DemoStatus>("/api/v1/demo/seed", { method: "POST" }),
+  reset: () => fetchJson<DemoStatus>("/api/v1/demo/reset", { method: "DELETE" }),
+};
+
 export const carbonApi = {
   routeEmissions: (routeId: string) =>
     fetchJson<RouteEmissions>(`/api/v1/carbon/routes/${routeId}/emissions`),

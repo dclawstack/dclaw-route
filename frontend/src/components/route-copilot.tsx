@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MessageSquare, X, Send, Bot } from "lucide-react";
 import { api } from "@/lib/api";
 
@@ -22,11 +23,14 @@ interface ChatResponse {
 }
 
 export default function RouteCopilot() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
   const [lastAction, setLastAction] = useState<SuggestedAction | null>(null);
+
+  if (pathname === "/") return null;
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
