@@ -41,9 +41,41 @@ export interface Stop {
   notes: string | null;
   customer_email: string | null;
   customer_phone: string | null;
+  territory_id: string | null;
   created_at: string;
   updated_at: string;
 }
+
+export interface Territory {
+  id: string;
+  name: string;
+  color: string;
+  created_at: string;
+}
+
+export interface TerritoryAssignment {
+  territory_id: string;
+  name: string;
+  color: string;
+  stop_count: number;
+  center_lat: number;
+  center_lng: number;
+}
+
+export interface ClusterResult {
+  territories: TerritoryAssignment[];
+  assigned_stops: number;
+  iterations: number;
+}
+
+export const territoriesApi = {
+  list: () => fetchJson<Territory[]>("/api/v1/territories/"),
+  cluster: (n: number) =>
+    fetchJson<ClusterResult>("/api/v1/territories/cluster", {
+      method: "POST",
+      body: JSON.stringify({ n }),
+    }),
+};
 
 export interface Driver {
   id: string;
@@ -212,8 +244,9 @@ export const vehiclesApi = {
 // ── Typed CRUD wrappers ──
 export const stopsApi = {
   list: () => fetchJson<Stop[]>("/api/v1/stops/"),
-  create: (data: Omit<Stop, "id" | "created_at" | "updated_at">) =>
-    fetchJson<Stop>("/api/v1/stops/", { method: "POST", body: JSON.stringify(data) }),
+  create: (
+    data: Pick<Stop, "name" | "address" | "lat" | "lng"> & Partial<Stop>
+  ) => fetchJson<Stop>("/api/v1/stops/", { method: "POST", body: JSON.stringify(data) }),
   remove: (id: string) =>
     fetchJson<void>(`/api/v1/stops/${id}`, { method: "DELETE" }),
 };

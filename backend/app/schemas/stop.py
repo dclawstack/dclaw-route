@@ -11,6 +11,7 @@ class StopBase(BaseModel):
     notes: str | None = None
     customer_email: str | None = None
     customer_phone: str | None = None
+    territory_id: UUID | None = None
 
 
 class StopCreate(StopBase):
