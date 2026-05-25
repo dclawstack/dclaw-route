@@ -108,6 +108,42 @@ export const analyticsApi = {
   summary: () => fetchJson<FleetSummary>("/api/v1/analytics/summary"),
 };
 
+export interface LoadingItem {
+  delivery_id: string;
+  stop_id: string;
+  stop_name: string;
+  load_position: number;
+  delivery_sequence: number;
+}
+
+export interface LoadingManifest {
+  route_id: string;
+  route_name: string;
+  dock_number: string | null;
+  item_count: number;
+  items: LoadingItem[];
+}
+
+export interface WmsSyncResult {
+  routes_synced: number;
+  deliveries_synced: number;
+  timestamp: string;
+}
+
+export const wmsApi = {
+  loadingSequence: (routeId: string) =>
+    fetchJson<LoadingManifest>(
+      `/api/v1/wms/routes/${routeId}/loading-sequence`
+    ),
+  assignDock: (routeId: string, dock_number: string) =>
+    fetchJson<{ route_id: string; dock_number: string }>(
+      `/api/v1/wms/routes/${routeId}/dock`,
+      { method: "POST", body: JSON.stringify({ dock_number }) }
+    ),
+  sync: () =>
+    fetchJson<WmsSyncResult>("/api/v1/wms/sync", { method: "POST" }),
+};
+
 export interface Driver {
   id: string;
   name: string;
@@ -141,6 +177,7 @@ export interface Route {
   status: string;
   total_distance_km: number;
   estimated_minutes: number;
+  dock_number: string | null;
   created_at: string;
   deliveries: Delivery[];
 }

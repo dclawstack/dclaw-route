@@ -12,6 +12,7 @@ class RouteBase(BaseModel):
     status: str = "planned"
     total_distance_km: float = 0.0
     estimated_minutes: int = 0
+    dock_number: str | None = None
 
 
 class RouteCreate(RouteBase):
@@ -25,6 +26,7 @@ class RouteUpdate(BaseModel):
     status: str | None = None
     total_distance_km: float | None = None
     estimated_minutes: int | None = None
+    dock_number: str | None = None
 
 
 class RouteRead(RouteBase):
