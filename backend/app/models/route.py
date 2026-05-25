@@ -22,6 +22,7 @@ class Route(Base):
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="planned")
     total_distance_km: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
     estimated_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    dock_number: Mapped[str | None] = mapped_column(String(20), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=utc_now)
 
     deliveries: Mapped[list["Delivery"]] = relationship(

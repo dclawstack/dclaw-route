@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera, Clock, Car, Bell, Undo2, Grid3X3, BarChart3 } from "lucide-react";
+import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera, Clock, Car, Bell, Undo2, Grid3X3, BarChart3, Warehouse } from "lucide-react";
 
 const tiles = [
   { href: "/stops", title: "Stops", desc: "Manage destinations and addresses", Icon: MapPin },
@@ -12,6 +12,7 @@ const tiles = [
   { href: "/notifications", title: "Notifications", desc: "SMS/email templates and event log", Icon: Bell },
   { href: "/returns", title: "Returns", desc: "Pickup queue and route consolidation", Icon: Undo2 },
   { href: "/analytics", title: "Analytics", desc: "Per-route P&L and fleet metrics", Icon: BarChart3 },
+  { href: "/wms", title: "Warehouse", desc: "Loading sequence and dock assignment", Icon: Warehouse },
   { href: "/mobile/delivery", title: "Mobile", desc: "Driver proof-of-delivery capture", Icon: Camera },
   { href: "/map", title: "Map", desc: "Visualize stops geographically", Icon: Map },
 ];
