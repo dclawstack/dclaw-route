@@ -210,6 +210,42 @@ export interface DispatchResult {
   route_id: string;
 }
 
+export interface RouteEmissions {
+  route_id: string;
+  route_name: string;
+  total_distance_km: number;
+  vehicle_id: string | null;
+  vehicle_plate: string | null;
+  co2_g_per_km: number | null;
+  co2_total_kg: number;
+}
+
+export interface FleetEmissions {
+  total_co2_kg: number;
+  total_distance_km: number;
+  avg_co2_g_per_km: number;
+  route_count: number;
+}
+
+export interface CarbonOptimizeResult {
+  route_id: string;
+  chosen_vehicle_id: string;
+  chosen_plate: string;
+  chosen_co2_g_per_km: number;
+  co2_saved_kg: number;
+}
+
+export const carbonApi = {
+  routeEmissions: (routeId: string) =>
+    fetchJson<RouteEmissions>(`/api/v1/carbon/routes/${routeId}/emissions`),
+  summary: () => fetchJson<FleetEmissions>("/api/v1/carbon/summary"),
+  optimizeVehicle: (routeId: string) =>
+    fetchJson<CarbonOptimizeResult>(
+      `/api/v1/carbon/routes/${routeId}/optimize-vehicle`,
+      { method: "POST" }
+    ),
+};
+
 export const avApi = {
   list: () => fetchJson<AutonomousVehicle[]>("/api/v1/av/"),
   create: (data: Partial<AutonomousVehicle> & { vendor: string; model: string }) =>
@@ -301,6 +337,7 @@ export interface Vehicle {
   odometer_km: number;
   last_service_odometer_km: number;
   last_service_at: string | null;
+  co2_g_per_km: number;
   created_at: string;
 }
 

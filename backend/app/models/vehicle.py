@@ -19,4 +19,5 @@ class Vehicle(Base):
     odometer_km: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     last_service_odometer_km: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     last_service_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    co2_g_per_km: Mapped[float] = mapped_column(Float, nullable=False, default=250.0)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=utc_now)
