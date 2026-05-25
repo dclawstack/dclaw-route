@@ -6,7 +6,14 @@ import { stopsApi, type Stop } from "@/lib/api";
 
 export default function StopsPage() {
   const [stops, setStops] = useState<Stop[]>([]);
-  const [form, setForm] = useState({ name: "", address: "", lat: "", lng: "" });
+  const [form, setForm] = useState({
+    name: "",
+    address: "",
+    lat: "",
+    lng: "",
+    customer_email: "",
+    customer_phone: "",
+  });
   const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
@@ -30,8 +37,17 @@ export default function StopsPage() {
         lat: parseFloat(form.lat),
         lng: parseFloat(form.lng),
         notes: null,
+        customer_email: form.customer_email || null,
+        customer_phone: form.customer_phone || null,
       });
-      setForm({ name: "", address: "", lat: "", lng: "" });
+      setForm({
+        name: "",
+        address: "",
+        lat: "",
+        lng: "",
+        customer_email: "",
+        customer_phone: "",
+      });
       refresh();
     } catch (e) {
       setError(String(e));
@@ -90,6 +106,19 @@ export default function StopsPage() {
             onChange={(e) => setForm({ ...form, lng: e.target.value })}
             required
           />
+          <input
+            className="rounded border px-3 py-2 text-sm sm:col-span-2"
+            placeholder="Customer email (optional)"
+            type="email"
+            value={form.customer_email}
+            onChange={(e) => setForm({ ...form, customer_email: e.target.value })}
+          />
+          <input
+            className="rounded border px-3 py-2 text-sm sm:col-span-2"
+            placeholder="Customer phone (optional)"
+            value={form.customer_phone}
+            onChange={(e) => setForm({ ...form, customer_phone: e.target.value })}
+          />
           <button
             type="submit"
             className="col-span-1 rounded px-4 py-2 text-sm font-semibold text-white sm:col-span-4"
@@ -110,6 +139,11 @@ export default function StopsPage() {
                 <div className="text-sm text-slate-500">{s.address}</div>
                 <div className="text-xs text-slate-400">
                   {s.lat.toFixed(4)}, {s.lng.toFixed(4)}
+                  {(s.customer_email || s.customer_phone) && (
+                    <span className="ml-2">
+                      · 📩 {s.customer_email ?? s.customer_phone}
+                    </span>
+                  )}
                 </div>
               </div>
               <button

@@ -39,6 +39,8 @@ export interface Stop {
   lat: number;
   lng: number;
   notes: string | null;
+  customer_email: string | null;
+  customer_phone: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -111,6 +113,48 @@ export interface FleetSyncResult {
   pushed: number;
   timestamp: string;
 }
+
+export interface NotificationTemplate {
+  id: string;
+  kind: string;
+  subject: string;
+  body: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NotificationEvent {
+  id: string;
+  delivery_id: string | null;
+  kind: string;
+  channel: "email" | "sms";
+  recipient: string;
+  subject: string;
+  body: string;
+  status: string;
+  sent_at: string;
+}
+
+export const notificationsApi = {
+  listTemplates: () =>
+    fetchJson<NotificationTemplate[]>("/api/v1/notifications/templates"),
+  updateTemplate: (id: string, data: { subject?: string; body?: string }) =>
+    fetchJson<NotificationTemplate>(`/api/v1/notifications/templates/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  createTemplate: (data: { kind: string; subject: string; body: string }) =>
+    fetchJson<NotificationTemplate>("/api/v1/notifications/templates", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  listEvents: () => fetchJson<NotificationEvent[]>("/api/v1/notifications/events"),
+  manualSend: (delivery_id: string, kind: string) =>
+    fetchJson<NotificationEvent>("/api/v1/notifications/send", {
+      method: "POST",
+      body: JSON.stringify({ delivery_id, kind }),
+    }),
+};
 
 export const vehiclesApi = {
   list: () => fetchJson<Vehicle[]>("/api/v1/vehicles/"),

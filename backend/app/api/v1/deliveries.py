@@ -9,7 +9,14 @@ from app.models.delivery import Delivery
 from app.repositories.delivery_repo import DeliveryRepository
 from app.schemas.delivery import DeliveryCreate, DeliveryRead, DeliveryUpdate
 from app.schemas.proof import DeliveryProofRead, DeliveryProofSubmit
+from app.services.notification_engine import (
+    ensure_default_templates,
+    send_notification,
+)
 from app.services.proof_validator import validate_photo
+
+
+_STATUS_TO_KIND = {"in_progress": "on_the_way", "completed": "delivered"}
 
 router = APIRouter()
 
@@ -56,10 +63,17 @@ async def update_delivery(
     data = payload.model_dump(exclude_unset=True)
     if data.get("status") == "completed" and delivery.completed_at is None:
         delivery.completed_at = utc_now()
+    prev_status = delivery.status
     for k, v in data.items():
         setattr(delivery, k, v)
     await db.commit()
     await db.refresh(delivery)
+
+    new_status = data.get("status")
+    if new_status and new_status != prev_status and new_status in _STATUS_TO_KIND:
+        await ensure_default_templates(db)
+        await send_notification(db, delivery.id, _STATUS_TO_KIND[new_status])
+
     return delivery
 
 
@@ -99,6 +113,10 @@ async def complete_delivery(
     delivery.completed_at = utc_now()
     await db.commit()
     await db.refresh(delivery)
+
+    await ensure_default_templates(db)
+    await send_notification(db, delivery.id, "delivered")
+
     return delivery
 
 

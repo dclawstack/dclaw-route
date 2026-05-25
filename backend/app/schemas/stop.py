@@ -9,6 +9,8 @@ class StopBase(BaseModel):
     lat: float
     lng: float
     notes: str | None = None
+    customer_email: str | None = None
+    customer_phone: str | None = None
 
 
 class StopCreate(StopBase):
@@ -21,6 +23,8 @@ class StopUpdate(BaseModel):
     lat: float | None = None
     lng: float | None = None
     notes: str | None = None
+    customer_email: str | None = None
+    customer_phone: str | None = None
 
 
 class StopRead(StopBase):
