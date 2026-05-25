@@ -63,6 +63,7 @@ export interface Delivery {
   route_id: string;
   stop_id: string;
   sequence: number;
+  kind: "drop_off" | "pickup";
   status: string;
   notes: string | null;
   completed_at: string | null;
@@ -134,6 +135,39 @@ export interface NotificationEvent {
   status: string;
   sent_at: string;
 }
+
+export interface ReturnPickup {
+  id: string;
+  route_id: string;
+  stop_id: string;
+  sequence: number;
+  kind: string;
+  status: string;
+  notes: string | null;
+  completed_at: string | null;
+  created_at: string;
+}
+
+export interface ConsolidationResult {
+  route_id: string;
+  route_name: string;
+  consolidated_count: number;
+  total_distance_km: number;
+  estimated_minutes: number;
+}
+
+export const returnsApi = {
+  request: (stop_id: string, notes?: string) =>
+    fetchJson<ReturnPickup>("/api/v1/returns/request", {
+      method: "POST",
+      body: JSON.stringify({ stop_id, notes: notes ?? null }),
+    }),
+  listPending: () => fetchJson<ReturnPickup[]>("/api/v1/returns/pending"),
+  consolidate: () =>
+    fetchJson<ConsolidationResult>("/api/v1/returns/consolidate", {
+      method: "POST",
+    }),
+};
 
 export const notificationsApi = {
   listTemplates: () =>

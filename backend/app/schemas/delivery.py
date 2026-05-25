@@ -7,6 +7,7 @@ class DeliveryBase(BaseModel):
     route_id: UUID
     stop_id: UUID
     sequence: int = 0
+    kind: str = "drop_off"
     status: str = "pending"
     notes: str | None = None
 
