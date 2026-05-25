@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera, Clock, Car, Bell, Undo2, Grid3X3, BarChart3, Warehouse, CloudSun } from "lucide-react";
+import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera, Clock, Car, Bell, Undo2, Grid3X3, BarChart3, Warehouse, CloudSun, Users } from "lucide-react";
 
 const tiles = [
   { href: "/stops", title: "Stops", desc: "Manage destinations and addresses", Icon: MapPin },
@@ -14,6 +14,7 @@ const tiles = [
   { href: "/analytics", title: "Analytics", desc: "Per-route P&L and fleet metrics", Icon: BarChart3 },
   { href: "/wms", title: "Warehouse", desc: "Loading sequence and dock assignment", Icon: Warehouse },
   { href: "/forecast", title: "Forecast", desc: "Traffic + weather-adjusted ETAs", Icon: CloudSun },
+  { href: "/gig", title: "Gig drivers", desc: "Crowdsourced surge capacity", Icon: Users },
   { href: "/mobile/delivery", title: "Mobile", desc: "Driver proof-of-delivery capture", Icon: Camera },
   { href: "/map", title: "Map", desc: "Visualize stops geographically", Icon: Map },
 ];

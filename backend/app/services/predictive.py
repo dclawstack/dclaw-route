@@ -64,14 +64,14 @@ async def forecast_route(
 
     tf = traffic_factor(when.hour)
     wf = _weather_factor
-    combined = tf * wf
+    combined = round(tf * wf, 2)
     return RouteForecast(
         route_id=route.id,
         route_name=route.name,
         hour=when.hour,
         traffic_factor=tf,
         weather_factor=wf,
-        combined_factor=round(combined, 2),
+        combined_factor=combined,
         baseline_minutes=route.estimated_minutes,
         adjusted_minutes=int(route.estimated_minutes * combined),
     )

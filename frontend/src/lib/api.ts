@@ -145,6 +145,50 @@ export interface WeatherState {
   factor: number;
 }
 
+export interface GigDriver {
+  id: string;
+  name: string;
+  phone: string | null;
+  rating: number;
+  vehicle_type: string;
+  current_lat: number | null;
+  current_lng: number | null;
+  status: string;
+  current_route_id: string | null;
+  created_at: string;
+}
+
+export interface GigAssignment {
+  gig_driver_id: string;
+  gig_driver_name: string;
+  rating: number;
+  vehicle_type: string;
+  distance_km: number | null;
+  route_id: string;
+}
+
+export const gigApi = {
+  list: () => fetchJson<GigDriver[]>("/api/v1/gig/drivers"),
+  create: (data: Partial<GigDriver> & { name: string }) =>
+    fetchJson<GigDriver>("/api/v1/gig/drivers", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  request: (data: {
+    route_id: string;
+    vehicle_type?: string;
+    min_rating?: number;
+    near_lat?: number;
+    near_lng?: number;
+  }) =>
+    fetchJson<GigAssignment>("/api/v1/gig/request", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  release: (gigId: string) =>
+    fetchJson<GigDriver>(`/api/v1/gig/release/${gigId}`, { method: "POST" }),
+};
+
 export const predictiveApi = {
   weather: () => fetchJson<WeatherState>("/api/v1/predictive/weather"),
   setWeather: (factor: number) =>
