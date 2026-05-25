@@ -16,6 +16,9 @@ class Route(Base):
     driver_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("drivers.id", ondelete="SET NULL"), nullable=True
     )
+    vehicle_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("vehicles.id", ondelete="SET NULL"), nullable=True
+    )
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="planned")
     total_distance_km: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
     estimated_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)

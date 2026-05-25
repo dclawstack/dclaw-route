@@ -71,12 +71,65 @@ export interface Route {
   id: string;
   name: string;
   driver_id: string | null;
+  vehicle_id: string | null;
   status: string;
   total_distance_km: number;
   estimated_minutes: number;
   created_at: string;
   deliveries: Delivery[];
 }
+
+export interface Vehicle {
+  id: string;
+  plate: string;
+  vehicle_type: string;
+  capacity_kg: number;
+  status: string;
+  odometer_km: number;
+  last_service_odometer_km: number;
+  last_service_at: string | null;
+  created_at: string;
+}
+
+export interface MaintenanceAlert {
+  vehicle_id: string;
+  plate: string;
+  km_since_service: number;
+  interval_km: number;
+  severity: "ok" | "due_soon" | "overdue";
+}
+
+export interface AutoAssignResult {
+  route_id: string;
+  vehicle_id: string;
+  plate: string;
+  reason: string;
+}
+
+export interface FleetSyncResult {
+  pulled: number;
+  pushed: number;
+  timestamp: string;
+}
+
+export const vehiclesApi = {
+  list: () => fetchJson<Vehicle[]>("/api/v1/vehicles/"),
+  create: (data: Pick<Vehicle, "plate"> & Partial<Vehicle>) =>
+    fetchJson<Vehicle>("/api/v1/vehicles/", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  remove: (id: string) =>
+    fetchJson<void>(`/api/v1/vehicles/${id}`, { method: "DELETE" }),
+  maintenanceAlerts: () =>
+    fetchJson<MaintenanceAlert[]>("/api/v1/vehicles/maintenance/alerts"),
+  autoAssign: (routeId: string) =>
+    fetchJson<AutoAssignResult>(`/api/v1/vehicles/auto-assign/${routeId}`, {
+      method: "POST",
+    }),
+  sync: () =>
+    fetchJson<FleetSyncResult>("/api/v1/vehicles/sync", { method: "POST" }),
+};
 
 // ── Typed CRUD wrappers ──
 export const stopsApi = {
