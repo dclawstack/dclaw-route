@@ -282,7 +282,29 @@ export const routesApi = {
       method: "POST",
       body: JSON.stringify({ max_stops: max_stops ?? null }),
     }),
+  insertUrgent: (id: string, stop_id: string) =>
+    fetchJson<InsertUrgentResult>(`/api/v1/routes/${id}/insert-urgent`, {
+      method: "POST",
+      body: JSON.stringify({ stop_id }),
+    }),
 };
+
+export interface StopImpact {
+  delivery_id: string;
+  stop_name: string;
+  old_sequence: number;
+  new_sequence: number;
+  eta_shift_minutes: number;
+}
+
+export interface InsertUrgentResult {
+  route_id: string;
+  inserted_delivery_id: string;
+  inserted_at_position: number;
+  extra_distance_km: number;
+  extra_minutes: number;
+  shifted_stops: StopImpact[];
+}
 
 export const deliveriesApi = {
   list: (routeId?: string) =>

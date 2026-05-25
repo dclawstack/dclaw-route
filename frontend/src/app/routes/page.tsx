@@ -7,6 +7,7 @@ import {
   routesApi,
   stopsApi,
   type Driver,
+  type InsertUrgentResult,
   type OptimizeResult,
   type Route,
   type Stop,
@@ -22,6 +23,8 @@ export default function RoutesPage() {
   const [error, setError] = useState<string | null>(null);
   const [optimizing, setOptimizing] = useState<string | null>(null);
   const [optimizeResults, setOptimizeResults] = useState<Record<string, OptimizeResult>>({});
+  const [urgentStop, setUrgentStop] = useState<Record<string, string>>({});
+  const [urgentResults, setUrgentResults] = useState<Record<string, InsertUrgentResult>>({});
 
   async function refresh() {
     try {
@@ -76,6 +79,20 @@ export default function RoutesPage() {
       setError(String(e));
     } finally {
       setOptimizing(null);
+    }
+  }
+
+  async function handleInsertUrgent(routeId: string) {
+    const stopId = urgentStop[routeId];
+    if (!stopId) return;
+    setError(null);
+    try {
+      const result = await routesApi.insertUrgent(routeId, stopId);
+      setUrgentResults((prev) => ({ ...prev, [routeId]: result }));
+      setUrgentStop((prev) => ({ ...prev, [routeId]: "" }));
+      refresh();
+    } catch (e) {
+      setError(String(e));
     }
   }
 
@@ -195,6 +212,37 @@ export default function RoutesPage() {
                         {result.improvement_percent.toFixed(1)}%
                       </div>
                     </div>
+                  </div>
+                )}
+                <div className="mt-3 flex gap-2">
+                  <select
+                    value={urgentStop[r.id] || ""}
+                    onChange={(e) =>
+                      setUrgentStop({ ...urgentStop, [r.id]: e.target.value })
+                    }
+                    className="flex-1 rounded border px-2 py-1 text-xs"
+                  >
+                    <option value="">— Insert urgent stop —</option>
+                    {stops.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() => handleInsertUrgent(r.id)}
+                    disabled={!urgentStop[r.id]}
+                    className="rounded border px-3 py-1 text-xs font-semibold text-amber-700 hover:bg-amber-50 disabled:opacity-50"
+                  >
+                    Insert
+                  </button>
+                </div>
+                {urgentResults[r.id] && (
+                  <div className="mt-2 rounded bg-amber-50 p-2 text-xs text-amber-900">
+                    Inserted at position {urgentResults[r.id].inserted_at_position} ·
+                    +{urgentResults[r.id].extra_distance_km.toFixed(2)} km · +
+                    {urgentResults[r.id].extra_minutes} min ·{" "}
+                    {urgentResults[r.id].shifted_stops.length} stops shifted
                   </div>
                 )}
               </li>
