@@ -19,6 +19,7 @@ class Delivery(Base):
         UUID(as_uuid=True), ForeignKey("stops.id", ondelete="CASCADE"), nullable=False
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    kind: Mapped[str] = mapped_column(String(20), nullable=False, default="drop_off")
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     photo_b64: Mapped[str | None] = mapped_column(Text, nullable=True)
