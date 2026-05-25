@@ -7,6 +7,7 @@ from app.models.delivery import Delivery
 from app.models.vehicle import Vehicle
 from app.models.notification import NotificationTemplate, NotificationEvent
 from app.models.territory import Territory
+from app.models.gig_driver import GigDriver
 
 __all__ = [
     "Base",
@@ -19,4 +20,5 @@ __all__ = [
     "NotificationTemplate",
     "NotificationEvent",
     "Territory",
+    "GigDriver",
 ]
