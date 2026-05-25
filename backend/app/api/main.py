@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import init_db
 from app.api.routes import health
-from app.api.v1 import stops, drivers, routes, deliveries, ai, tracking, driver_shifts, vehicles, notifications, returns
+from app.api.v1 import stops, drivers, routes, deliveries, ai, tracking, driver_shifts, vehicles, notifications, returns, territories
 
 
 @asynccontextmanager
@@ -39,3 +39,4 @@ app.include_router(driver_shifts.router, prefix="/api/v1/shifts", tags=["shifts"
 app.include_router(vehicles.router, prefix="/api/v1/vehicles", tags=["vehicles"])
 app.include_router(notifications.router, prefix="/api/v1/notifications", tags=["notifications"])
 app.include_router(returns.router, prefix="/api/v1/returns", tags=["returns"])
+app.include_router(territories.router, prefix="/api/v1/territories", tags=["territories"])

@@ -6,6 +6,7 @@ from app.models.route import Route
 from app.models.delivery import Delivery
 from app.models.vehicle import Vehicle
 from app.models.notification import NotificationTemplate, NotificationEvent
+from app.models.territory import Territory
 
 __all__ = [
     "Base",
@@ -17,4 +18,5 @@ __all__ = [
     "Vehicle",
     "NotificationTemplate",
     "NotificationEvent",
+    "Territory",
 ]

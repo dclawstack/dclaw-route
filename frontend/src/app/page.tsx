@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera, Clock, Car, Bell, Undo2 } from "lucide-react";
+import { MapPin, Truck, Route as RouteIcon, Map, Radio, Camera, Clock, Car, Bell, Undo2, Grid3X3 } from "lucide-react";
 
 const tiles = [
   { href: "/stops", title: "Stops", desc: "Manage destinations and addresses", Icon: MapPin },
   { href: "/drivers", title: "Drivers", desc: "Driver roster and assignments", Icon: Truck },
   { href: "/vehicles", title: "Fleet", desc: "Vehicles and maintenance alerts", Icon: Car },
   { href: "/shifts", title: "Shifts & HOS", desc: "Driver schedules and fatigue alerts", Icon: Clock },
+  { href: "/territories", title: "Territories", desc: "Cluster stops into territories", Icon: Grid3X3 },
   { href: "/routes", title: "Routes", desc: "Plan and dispatch routes", Icon: RouteIcon },
   { href: "/tracking", title: "Tracking", desc: "Live driver positions and ETAs", Icon: Radio },
   { href: "/notifications", title: "Notifications", desc: "SMS/email templates and event log", Icon: Bell },
