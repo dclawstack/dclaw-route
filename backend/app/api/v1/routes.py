@@ -31,9 +31,11 @@ async def create_route(payload: RouteCreate, db: AsyncSession = Depends(get_db))
     route = Route(
         name=payload.name,
         driver_id=payload.driver_id,
+        vehicle_id=payload.vehicle_id,
         status=payload.status,
         total_distance_km=payload.total_distance_km,
         estimated_minutes=payload.estimated_minutes,
+        dock_number=payload.dock_number,
     )
     db.add(route)
     await db.flush()

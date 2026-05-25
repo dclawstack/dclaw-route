@@ -10,6 +10,7 @@ class VehicleBase(BaseModel):
     status: str = "available"
     odometer_km: int = 0
     last_service_odometer_km: int = 0
+    co2_g_per_km: float = 250.0
 
 
 class VehicleCreate(VehicleBase):
@@ -24,6 +25,7 @@ class VehicleUpdate(BaseModel):
     odometer_km: int | None = None
     last_service_odometer_km: int | None = None
     last_service_at: datetime | None = None
+    co2_g_per_km: float | None = None
 
 
 class VehicleRead(VehicleBase):
