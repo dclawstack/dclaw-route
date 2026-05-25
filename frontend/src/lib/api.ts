@@ -77,6 +77,37 @@ export const territoriesApi = {
     }),
 };
 
+export interface RoutePnL {
+  route_id: string;
+  route_name: string;
+  total_distance_km: number;
+  estimated_minutes: number;
+  fuel_cost_usd: number;
+  labor_cost_usd: number;
+  vehicle_cost_usd: number;
+  total_cost_usd: number;
+  stop_count: number;
+  completed_count: number;
+  on_time_count: number;
+  miles_per_stop: number;
+  cost_per_delivery: number;
+  on_time_rate_pct: number;
+}
+
+export interface FleetSummary {
+  route_count: number;
+  total_distance_km: number;
+  total_cost_usd: number;
+  avg_cost_per_delivery: number;
+  avg_on_time_rate_pct: number;
+  rates: Record<string, number>;
+}
+
+export const analyticsApi = {
+  routes: () => fetchJson<RoutePnL[]>("/api/v1/analytics/routes"),
+  summary: () => fetchJson<FleetSummary>("/api/v1/analytics/summary"),
+};
+
 export interface Driver {
   id: string;
   name: string;
