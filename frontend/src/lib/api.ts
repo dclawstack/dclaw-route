@@ -130,6 +130,32 @@ export interface WmsSyncResult {
   timestamp: string;
 }
 
+export interface RouteForecast {
+  route_id: string;
+  route_name: string;
+  hour: number;
+  traffic_factor: number;
+  weather_factor: number;
+  combined_factor: number;
+  baseline_minutes: number;
+  adjusted_minutes: number;
+}
+
+export interface WeatherState {
+  factor: number;
+}
+
+export const predictiveApi = {
+  weather: () => fetchJson<WeatherState>("/api/v1/predictive/weather"),
+  setWeather: (factor: number) =>
+    fetchJson<WeatherState>("/api/v1/predictive/weather", {
+      method: "POST",
+      body: JSON.stringify({ factor }),
+    }),
+  routeForecast: (routeId: string) =>
+    fetchJson<RouteForecast>(`/api/v1/predictive/routes/${routeId}/forecast`),
+};
+
 export const wmsApi = {
   loadingSequence: (routeId: string) =>
     fetchJson<LoadingManifest>(
