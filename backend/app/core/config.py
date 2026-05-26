@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     secret_key: str = "change-me-in-production"
     access_token_expire_minutes: int = 60
 
+    enable_demo_mode: bool = True
+
     class Config:
         env_file = ".env"
         case_sensitive = False
