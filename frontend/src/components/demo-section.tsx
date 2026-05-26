@@ -15,7 +15,8 @@ export default function DemoSection() {
   const refresh = useCallback(async () => {
     try {
       setStatus(await demoApi.status());
-    } catch {
+      setError(null);
+    } catch (e) {
       setStatus({
         enabled: false,
         seeded: false,
@@ -24,6 +25,11 @@ export default function DemoSection() {
         vehicle_count: 0,
         route_count: 0,
       });
+      setError(
+        e instanceof ApiError
+          ? e.message
+          : `Cannot reach the API at ${process.env.NEXT_PUBLIC_API_URL || "(unset)"}. ${String(e)}`
+      );
     } finally {
       setLoading(false);
     }
@@ -57,9 +63,9 @@ export default function DemoSection() {
     }
   }
 
-  if (loading || !status?.enabled) return null;
-
-  const isSeeded = status.seeded && status.stop_count > 0;
+  const isSeeded = !!status?.seeded && status.stop_count > 0;
+  const backendReachable = !loading && status !== null && !error;
+  const backendDisabled = !loading && status !== null && !status.enabled && !error;
 
   return (
     <section id="demo" className="bg-emerald-50/40 py-20">
@@ -86,14 +92,18 @@ export default function DemoSection() {
               <div>
                 <div className="font-semibold">Demo dataset</div>
                 <div className="text-sm text-slate-500">
-                  {isSeeded
-                    ? `${status.stop_count} stops · ${status.driver_count} drivers · ${status.vehicle_count} vehicles · ${status.route_count} routes`
-                    : "Not loaded yet"}
+                  {loading
+                    ? "Checking backend…"
+                    : !status
+                      ? ""
+                      : isSeeded
+                        ? `${status.stop_count} stops · ${status.driver_count} drivers · ${status.vehicle_count} vehicles · ${status.route_count} routes`
+                        : "Not loaded yet"}
                 </div>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              {!isSeeded && (
+              {backendReachable && !isSeeded && (
                 <button
                   onClick={handleSeed}
                   disabled={seeding}
@@ -104,7 +114,7 @@ export default function DemoSection() {
                   {seeding ? "Seeding…" : "Seed demo data"}
                 </button>
               )}
-              {isSeeded && (
+              {backendReachable && isSeeded && (
                 <>
                   <Link
                     href="/dashboard"
@@ -127,17 +137,27 @@ export default function DemoSection() {
           </div>
 
           {error && (
-            <div className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-              {error}
+            <div className="mt-4 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">
+              Backend not reachable yet. Start it with{" "}
+              <code className="font-mono">docker compose up</code> or run the
+              FastAPI app on <code className="font-mono">localhost:18163</code>,
+              then refresh. <span className="block mt-1 text-xs text-amber-700">{error}</span>
             </div>
           )}
 
-          {isSeeded && (
+          {backendDisabled && (
+            <div className="mt-4 rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-700">
+              Demo mode is disabled on this deployment (set{" "}
+              <code className="font-mono">ENABLE_DEMO_MODE=true</code> to turn it on).
+            </div>
+          )}
+
+          {backendReachable && isSeeded && (
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Stat label="Stops" value={status.stop_count} />
-              <Stat label="Drivers" value={status.driver_count} />
-              <Stat label="Vehicles" value={status.vehicle_count} />
-              <Stat label="Routes" value={status.route_count} />
+              <Stat label="Stops" value={status!.stop_count} />
+              <Stat label="Drivers" value={status!.driver_count} />
+              <Stat label="Vehicles" value={status!.vehicle_count} />
+              <Stat label="Routes" value={status!.route_count} />
             </div>
           )}
         </div>
