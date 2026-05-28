@@ -7,8 +7,8 @@
 
 **DClaw Route** is a vertical SaaS application built on the DClaw Stack.
 
-- **Backend Port:** `18163` (FastAPI) — matches REVISED-PRD.md §1
-- **Frontend Port:** `3093` (Next.js) — matches REVISED-PRD.md §1
+- **Backend Port:** `8137` (FastAPI) — matches REVISED-PRD.md §1
+- **Frontend Port:** `3051` (Next.js) — matches REVISED-PRD.md §1
 - **Database:** `dclaw_route` (PostgreSQL)
 - **Base API Path:** `/api/v1`
 
@@ -35,7 +35,7 @@ These are non-negotiable. If an agent suggests changing them, reject it.
 
 ### Docker
 - **Backend:** `python:3.11-slim`, non-root `appuser`, healthcheck with `python urllib.request.urlopen()`
-- **Frontend:** `node:20-alpine`, port `3093`
+- **Frontend:** `node:20-alpine`, port `3051`
 - **Compose:** container port MUST match `EXPOSE`/`ENV PORT`
 
 ## Directory Structure
