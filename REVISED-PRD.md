@@ -25,8 +25,8 @@ status: Future
 | **Tagline** | Route optimization |
 | **Color** | #10B981 |
 | **Phase** | Future |
-| **Port (Frontend Dev)** | 3093 (TBD — assign before build) |
-| **Port (Backend Dev)** | 18163 (TBD — assign before build) |
+| **Port (Frontend Dev)** | 3051 |
+| **Port (Backend Dev)** | 8137 |
 | **Maturity Tier** | 🟡 Tier 2 — Partial |
 
 ---

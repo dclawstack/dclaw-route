@@ -29,7 +29,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 18163
+              containerPort: 8137
               protocol: TCP
           env:
             - name: APP_ENV
@@ -37,7 +37,7 @@ spec:
             - name: API_HOST
               value: "0.0.0.0"
             - name: API_PORT
-              value: "18163"
+              value: "8137"
             - name: DATABASE_URL
               value: "postgresql+asyncpg://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dclaw-route.fullname" . }}-postgresql:5432/{{ .Values.postgresql.auth.database }}"
           resources:
