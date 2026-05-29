@@ -1,0 +1,25 @@
+# Cloud / production overrides. Use with:
+#   helm install dclaw-route ./helm -n <ns> -f values-prod.yaml
+image:
+  backend:
+    repository: ghcr.io/dclawstack/dclaw-route-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: ghcr.io/dclawstack/dclaw-route-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+service:
+  frontend:
+    type: ClusterIP
+    port: 3051
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  host: route.dclawstack.io
+  tls:
+    - secretName: dclaw-route-tls
+      hosts:
+        - route.dclawstack.io
