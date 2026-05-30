@@ -21,4 +21,4 @@ class SuggestedAction(BaseModel):
 class RouteChatResponse(BaseModel):
     reply: str
     suggested_action: SuggestedAction
-    provider: Literal["openrouter", "stub"]
+    provider: Literal["ollama", "openrouter", "stub"]

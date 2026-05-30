@@ -3,8 +3,9 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
-def _no_openrouter_key(monkeypatch):
-    """Force the stub path so tests don't hit OpenRouter."""
+def _no_llm_providers(monkeypatch):
+    """Force the stub path so tests don't hit Ollama or OpenRouter."""
+    monkeypatch.setenv("OLLAMA_URL", "")
     monkeypatch.setenv("OPENROUTER_API_KEY", "")
 
 
