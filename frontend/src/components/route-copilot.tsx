@@ -19,7 +19,7 @@ interface SuggestedAction {
 interface ChatResponse {
   reply: string;
   suggested_action: SuggestedAction;
-  provider: "openrouter" | "stub";
+  provider: "ollama" | "openrouter" | "stub";
 }
 
 export default function RouteCopilot() {
